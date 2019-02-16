@@ -1,0 +1,33 @@
+; IDE Server
+(ocamllex utf8_convert config_lexer coq_lex)
+
+(library
+ (name gui)
+ (public_name coqide.gui)
+ (wrapped false)
+ (modules (:standard \ coqide_main))
+ (optional)
+ (libraries coqide-server.protocol coqide-server.core lablgtk2.sourceview2))
+
+(rule
+ (targets coqide_os_specific.ml)
+ (deps (:in-file coqide_X11.ml.in)) ; TODO support others
+ (action (copy# %{in-file} %{targets})))
+
+(executable
+ (name coqide_main)
+ (public_name coqide)
+ (package coqide)
+ (modules coqide_main)
+ (libraries coqide.gui))
+
+; FIXME: we should install those in share/coqide. We better do this
+; once the make-based system has been phased out.
+(install
+ (section share_root)
+ (package coqide)
+ (files
+  (coq.png as coq/coq.png)
+  (coq_style.xml as coq/coq_style.xml)
+  (coq.lang as coq/coq.lang)
+  (coq-ssreflect.lang as coq/coq-ssreflect.lang)))

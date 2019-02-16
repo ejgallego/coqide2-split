@@ -1,0 +1,4 @@
+; Default flags for all Coq libraries.
+(env
+ (dev     (flags :standard -rectypes -w -9-27+40+60))
+ (release (flags :standard -rectypes)))
